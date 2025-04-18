@@ -5,6 +5,7 @@ const generatetoken = (id)=>{
     return jwt.sign({id},process.env.JWT_SECRET,{expiresIn:"1h" })
 }
 
+//Register User
 exports.registerUser = async(req,res)=>{
     const {fullname,email,password,profileImageUrl} = req.body;
     if(!fullname || !email || !password){
