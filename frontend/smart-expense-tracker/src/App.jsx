@@ -1,4 +1,4 @@
-import react from 'react';
+import React from 'react';
 
 import { BrowserRouter as Router ,Route,Routes,Navigate } from 'react-router-dom';
 import Login from './pages/Login';
@@ -6,9 +6,12 @@ import SignUp from './pages/SignUp';
 import Home from './pages/Dashboard/Home';
 import Expense from './pages/Dashboard/Expense';
 import Income from './pages/Dashboard/Income';
+import UserProvider from './context/UserContext';
+
 
 const App = () => {
   return (
+    <UserProvider>
     <div>
       <Router>
         <Routes>
@@ -21,6 +24,7 @@ const App = () => {
         </Routes>
       </Router>
     </div>
+    </UserProvider>
   );
 }
 export default App;

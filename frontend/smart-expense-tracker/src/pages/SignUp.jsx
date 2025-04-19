@@ -6,7 +6,11 @@ import Input from '../components/inputs/input';
 import { Link } from 'react-router-dom';
 import { validateEmail } from '../utils/helper';
 import ProfilePhotoSelector from '../components/inputs/ProfilePhotoSelector';
-
+import axiosInstance from '../utils/axiosInstance'; 
+import { API_PATHS } from '../utils/apiPaths';
+import { UserContext } from '../context/UserContext';
+import { useContext } from 'react';
+import uploadImage from '../utils/uploadimage';
 
 const SignUp = () => {
     const [profilepic, setProfilePic] = useState('');
@@ -14,27 +18,55 @@ const SignUp = () => {
     const [email, setEmail] = useState('');
     const [password, setPassword] = useState('');
     const [error, setError] = useState(null);
-
+    
+    const { updateUser } = useContext(UserContext);
     const navigate = useNavigate();
 
     const handleLogin = async (e) => {
-         e.preventDefault();
-         let profileImageUrl="";
+        e.preventDefault();
+        let profileImageUrl = "";
 
-         if(!fullname){
+        if (!fullname) {
             setError('Please enter your name');
             return;
         }
-            if(!validateEmail(email)){
-                setError('Please enter a valid email address');
-                return;
+        if (!validateEmail(email)) {
+            setError('Please enter a valid email address');
+            return;
+        }
+        if (!password) {
+            setError('Please enter your password');
+            return;
+        }
+        setError("");
+
+        // SignUp API call
+        try {
+
+            if (profilepic) {
+                const imgUploadRes = await uploadImage(profilepic);
+                profileImageUrl = imgUploadRes.imageUrl || "";
             }
-            if(!password){
-                setError('Please enter your password');
-                return;
+            const response = await axiosInstance.post(API_PATHS.AUTH.REGISTER, {
+                fullname,
+                email,
+                password,
+                profileImageUrl
+            });
+            const { token, user } = response.data;
+            if (token) {
+                localStorage.setItem('token', token);
+                updateUser(user);
+                navigate('/dashboard');
             }
-            setErroor("");
-     }
+        } catch (error) {
+            if (error.response && error.response.data.message) {
+                setError(error.response.data.message);
+            } else {
+                setError('Something went wrong, please try again later');
+            }
+        }
+    }
     return (
         <AuthLayout>
             <div className='lg:w-[100%] h-auto md:h-full mt-10 md:mt-0 flex flex-col justify-center'>
