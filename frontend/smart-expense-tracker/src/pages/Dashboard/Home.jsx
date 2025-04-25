@@ -1,3 +1,4 @@
+
 import React from 'react';
 import DashboardLayout from '../../components/layouts/DashboardLayout';
 import { useUserAuth } from '../../hooks/useUserAuth'; // Custom hook to handle user authentication and redirection
@@ -109,3 +110,4 @@ const Home = () => {
 };
 
 export default Home;
+

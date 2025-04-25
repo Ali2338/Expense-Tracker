@@ -29,3 +29,4 @@ export const prepareExpenseBarChartData = (data = []) => {
     }));
     return ChartData;
 }
+
