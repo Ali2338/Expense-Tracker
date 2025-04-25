@@ -9,13 +9,13 @@ exports.getDashboardData = async (req, res) => {
         const userObjectId = new Types.ObjectId(String(userId));
 
         // Fetch total income
-        const totalIncomeAgg = await Income.aggregate([
+        const totalIncome = await Income.aggregate([
             { $match: { userId: userObjectId } },
             { $group: { _id: null, total: { $sum: "$amount" } } }
         ]);
-
+          console.log("Total Income",{totalIncome , userId:isValidObjectId(userId)})
         // Fetch total expense
-        const totalExpenseAgg = await Expense.aggregate([
+        const totalExpense = await Expense.aggregate([
             { $match: { userId: userObjectId } },
             { $group: { _id: null, total: { $sum: "$amount" } } }
         ]);
@@ -27,16 +27,16 @@ exports.getDashboardData = async (req, res) => {
             date: { $gte: last60Days }
         }).sort({ date: -1 });
 
-        const incomeLast60Days = last60DaysIncomeTransactions.reduce((sum, txn) => sum + txn.amount, 0);
+        const incomeLast60Days = last60DaysIncomeTransactions.reduce((sum, transaction) => sum + transaction.amount, 0);
 
         // Transactions from last 30 days
         const last30Days = new Date(Date.now() - 30 * 24 * 60 * 60 * 1000);
-        const last30DaysIncomeTransactions = await Income.find({
+        const last30DaysExpenseTransactions = await Expense.find({
             userId: userObjectId,
             date: { $gte: last30Days }
         }).sort({ date: -1 });
 
-        const incomeLast30Days = last30DaysIncomeTransactions.reduce((sum, txn) => sum + txn.amount, 0);
+        const expensesLast30Days = last30DaysExpenseTransactions.reduce((sum, transaction) => sum + transaction.amount, 0);
 
         // Recent 5 transactions (income + expense)
         const recentIncome = await Income.find({ userId: userObjectId }).sort({ date: -1 }).limit(5);
@@ -49,11 +49,11 @@ exports.getDashboardData = async (req, res) => {
 
         // Response
         res.json({
-            totalBalance: (totalIncomeAgg[0]?.total || 0) - (totalExpenseAgg[0]?.total || 0),
-            totalIncome: totalIncomeAgg[0]?.total || 0,
-            totalExpense: totalExpenseAgg[0]?.total || 0,
-            incomeLast60Days: { total: incomeLast60Days, transactions: last60DaysIncomeTransactions },
-            incomeLast30Days: { total: incomeLast30Days, transactions: last30DaysIncomeTransactions },
+            totalBalance: (totalIncome[0]?.total || 0) - (totalExpense[0]?.total || 0),
+            totalIncome: totalIncome[0]?.total || 0,
+            totalExpense: totalExpense[0]?.total || 0,
+            last30DaysExpenses: { total: expensesLast30Days, transactions: last30DaysExpenseTransactions },
+            last60DaysIncome: { total: incomeLast60Days, transactions: last60DaysIncomeTransactions },
             recentTransactions: lastTransactions,
         });
 
