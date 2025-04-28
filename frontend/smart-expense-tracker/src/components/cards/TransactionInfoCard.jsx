@@ -18,7 +18,7 @@ export default TransactionInfoCard;*/
 import React from "react";
 import { LuUtensils, LuTrendingUp, LuTrendingDown, LuTrash2 } from "react-icons/lu";
 
-const TransactionInfoCard = ({ title, icon, date, amount, type, hideDeleteBtn }) => {
+const TransactionInfoCard = ({ title, icon, date, amount, type, hideDeleteBtn, onDelete }) => {
     const getAmountstyles = ()=>
         type ==="income"? "bg-green-50 text-green-500" : "bg-red-50 text-red-500";
 
@@ -46,7 +46,7 @@ const TransactionInfoCard = ({ title, icon, date, amount, type, hideDeleteBtn })
             )}
 
             <div className={`flex items-center gap-2 px-3 py-1.5 rounded-md ${getAmountstyles()}`}>
-                <h6 className="text-sx font-medium">
+                <h6 className="text-xs font-medium">
                     {type === "income"?"+" : "-"} ${amount}
                 </h6>
                 {type === "income" ? <LuTrendingUp/> : <LuTrendingDown/>}
