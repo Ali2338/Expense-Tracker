@@ -1,4 +1,5 @@
 import { data } from "react-router-dom";
+import moment from "moment"
 
 export const validateEmail = (email) => {
     const Regex = /^[^\s@]+@[^\s@]+\.[^\s@]+$/;
@@ -39,6 +40,18 @@ export const prepareIncomeBarChartData = (data = []) => {
         month: moment(item?.date).format('Do MMM'),
         amount: item?.amount,
         source: item.source,
+    }));
+
+    return ChartData;
+}
+
+export const prepareExpenseLineChartData = (data = []) => {
+    const sortedData = [...data].sort((a, b) => new Date(a.date) - new Date(b.date));
+
+    const ChartData = sortedData.map((item) => ({
+        month: moment(item?.date).format('Do MMM'),
+        amount: item?.amount,
+        category: item.category,
     }));
 
     return ChartData;

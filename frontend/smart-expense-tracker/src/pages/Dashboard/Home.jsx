@@ -56,19 +56,19 @@ const Home = () => {
         <div className='grid grid-cols-1 md:grid-cols-3 gap-6'>
           <InfoCard
             icon={<IoMdCard />}
-            label="total balance"
+            label="Total balance"
             value={addThousandSeparator(dashboardData?.totalBalance || 0)}
             color="bg-primary"
           />
           <InfoCard
             icon={<LuWalletMinimal />}
-            label="total Income"
+            label="Total Income"
             value={addThousandSeparator(dashboardData?.totalIncome || 0)}
             color="bg-orange-500"
           />
           <InfoCard
             icon={<LuHandCoins />}
-            label="total Expense"
+            label="Total Expense"
             value={addThousandSeparator(dashboardData?.totalExpense || 0)}
             color="bg-red-500"
           />

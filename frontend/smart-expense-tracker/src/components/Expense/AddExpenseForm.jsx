@@ -2,9 +2,9 @@ import React, { useState } from 'react'
 import Input from '../inputs/input';
 import EmojiPickerPopup from '../EmojiPickerPopup';
 
-const AddIncomeForm = ({onAddIncome}) => {
+const AddExpenseForm = ({ onAddExpense }) => {
     const [income, setIncome] = useState({
-        source: "",
+        category: "",
         amount: "",
         date: "",
         icon: "",
@@ -18,10 +18,10 @@ const AddIncomeForm = ({onAddIncome}) => {
                 onSelect={(selectedIcon) => handleChange("icon", selectedIcon)}
             />
             <Input
-                value={income.source}
-                onChange={({ target }) => handleChange("source", target.value)}
-                label="Income Source"
-                placeholder="Freelance, Salary, etc"
+                value={income.category}
+                onChange={({ target }) => handleChange("category", target.value)}
+                label="Category"
+                placeholder="Rent,Food, etc"
                 type="text"
             />
 
@@ -43,15 +43,15 @@ const AddIncomeForm = ({onAddIncome}) => {
 
             <div className="flex justify-end mt-6">
                 <button
-                type="button"
-                className="add-btn add-btn-fill"
-                onClick={()=>onAddIncome(income)}
+                    type="button"
+                    className="add-btn add-btn-fill"
+                    onClick={() => onAddExpense(income)}
                 >
-                    Add Income
+                    Add Expense
                 </button>
             </div>
         </div>
     )
 }
 
-export default AddIncomeForm;
+export default AddExpenseForm;
