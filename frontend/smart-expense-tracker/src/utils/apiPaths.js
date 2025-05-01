@@ -8,6 +8,7 @@ export const API_PATHS = {
     },
     DASHBOARD:{
         GET_DATA : "api/v1/dashboard",
+        SET_BUDGET: "api/v1/dashboard/set-budget",
     },
     INCOME :{
         GET_INCOME : "api/v1/income/get",

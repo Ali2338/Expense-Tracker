@@ -5,7 +5,8 @@ const userSchema = new mongoose.Schema({
     fullname:{type:String,required:true},
     email:{type:String,required:true,unique:true},
     password:{type:String,required:true},
-    profileImageUrl:{type:String,default:null}
+    profileImageUrl:{type:String,default:null},
+    budgetLimit: { type: Number, default: 0 }
 },
 {timestamps:true});
 

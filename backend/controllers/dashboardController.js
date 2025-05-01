@@ -2,6 +2,35 @@
 const Income = require('../models/Income');
 const Expense = require('../models/Expense');
 const { Types, isValidObjectId } = require('mongoose');
+const User = require('../models/User');
+
+// Controller for updating the budget limit
+exports.setBudgetLimit = async (req, res) => {
+    try {
+        const { budgetLimit } = req.body;
+
+        if (budgetLimit <= 0) {
+            return res.status(400).json({ error: 'Budget limit must be a positive number.' });
+        }
+
+        const userId = req.user.id;
+        const user = await User.findById(userId);
+
+        if (!user) {
+            return res.status(404).json({ error: 'User not found.' });
+        }
+
+        user.budgetLimit = budgetLimit;
+        await user.save();
+
+        res.json({ success: true, message: 'Budget updated successfully!' });
+    } catch (error) {
+        console.error('Error updating budget limit:', error);
+        res.status(500).json({ error: 'Server Error' });
+    }
+};
+
+
 
 exports.getDashboardData = async (req, res) => {
     try {
@@ -13,7 +42,7 @@ exports.getDashboardData = async (req, res) => {
             { $match: { userId: userObjectId } },
             { $group: { _id: null, total: { $sum: "$amount" } } }
         ]);
-          console.log("Total Income",{totalIncome , userId:isValidObjectId(userId)})
+        console.log("Total Income", { totalIncome, userId: isValidObjectId(userId) })
         // Fetch total expense
         const totalExpense = await Expense.aggregate([
             { $match: { userId: userObjectId } },
@@ -47,6 +76,14 @@ exports.getDashboardData = async (req, res) => {
             ...recentExpense.map(txn => ({ ...txn.toObject(), type: "expense" }))
         ].sort((a, b) => new Date(b.date) - new Date(a.date)).slice(0, 5);
 
+        // Fetch user's budget limit
+        const user = await User.findById(userId);
+        const budgetLimit = user.budgetLimit || 0;
+
+        // Check if over budget
+        const isOverBudget = (totalExpense[0]?.total || 0) > budgetLimit;
+
+
         // Response
         res.json({
             totalBalance: (totalIncome[0]?.total || 0) - (totalExpense[0]?.total || 0),
@@ -55,6 +92,8 @@ exports.getDashboardData = async (req, res) => {
             last30DaysExpenses: { total: expensesLast30Days, transactions: last30DaysExpenseTransactions },
             last60DaysIncome: { total: incomeLast60Days, transactions: last60DaysIncomeTransactions },
             recentTransactions: lastTransactions,
+            isOverBudget, // Add this
+           budgetLimit,
         });
 
     } catch (error) {

@@ -19,6 +19,9 @@ app.use(express.json());
 
 connectDB();
 
+// Serve uploaded files statically
+app.use('/uploads', express.static(path.join(__dirname, 'uploads')));
+
 app.use('/api/v1/auth',authRoutes);
 app.use('/api/v1/income',incomeRoutes);
 app.use('/api/v1/expense',expenseRoutes);

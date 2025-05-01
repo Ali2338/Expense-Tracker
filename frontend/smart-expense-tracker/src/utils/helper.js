@@ -7,14 +7,18 @@ export const validateEmail = (email) => {
 }
 
 export const getInitials = (name) => {
-    if (!name) return "";
-    const words = name.split(" ");
+    if (!name) return "";  // Return empty string if no name provided
+    
+    const words = name.trim().split(/\s+/);  // Split on one or more spaces
     let initials = "";
+    
     for (let i = 0; i < Math.min(words.length, 2); i++) {
-        initials += words[i][0];
+        initials += words[i][0];  // Add first character of each word
     }
-    return initials.toUpperCase();  // Added parentheses to the method
+    
+    return initials.toUpperCase();  // Ensure the initials are uppercase
 };
+
 
 export const addThousandSeparator = (num) => {
     if (num === null || isNaN(num)) return "";
