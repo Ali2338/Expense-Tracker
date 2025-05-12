@@ -151,7 +151,7 @@ const Home = () => {
       if (response.data) {
         setDashboardData(response.data);
         setNewBudgetLimit(response.data.budgetLimit || 0); // Set the budget limit from fetched data
-        if (response.data.isOverBudget) {
+        if ((response.data.isOverBudget) && (response.data.budgetLimit > 0)) {
           alert(`⚠️ You have exceeded your budget limit!`);
         }
       }
@@ -242,7 +242,6 @@ const Home = () => {
         <div className='grid grid-cols-1 md:grid-cols-3 gap-6 mt-6'>
           <RecentTransactions
             transactions={dashboardData?.recentTransactions}
-            onSeeMore={() => navigate("/expense")}
           />
           <FinanceOverview
             totalBalance={dashboardData?.totalBalance || 0}

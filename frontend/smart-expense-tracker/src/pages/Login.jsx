@@ -15,6 +15,7 @@ const Login = () => {
     const [email, setEmail] = useState('');
     const [password, setPassword] = useState('');
     const [error, setError] = useState(null);
+    
 
     const {updateUser} = useContext(UserContext);
 
@@ -38,12 +39,10 @@ const Login = () => {
             email,
             password,
         });
-        const {token, user} = response.data;
-        if(token){
-            localStorage.setItem('token', token);
-            updateUser(user);
-            navigate('/dashboard');
-    }
+         // Expect: message and userId (no token/user yet)
+         navigate('/verify-otp', { state: { email } });
+
+
     }catch(error){
         if(error.response && error.response.data.message){
             setError(error.response.data.message);

@@ -2,13 +2,16 @@ const express = require('express');
 const { protect } = require('../middleware/authMiddleware');
 
 const{ registerUser, loginUser, getUserInfo } = require('../controllers/authController');
+const { verifyOtp } = require('../controllers/verifyOtpController');
 const upload = require('../middleware/uploadMiddleware');
 
 const router = express.Router();
 
 router.post("/register",registerUser);
 router.post("/login",loginUser);
+router.post("/verify-otp", verifyOtp);
 router.get("/userInfo", protect ,getUserInfo);
+
 
 router.post("/upload-image", upload.single('image'), (req, res) => {
     console.log(req.files); 

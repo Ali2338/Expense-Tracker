@@ -8,6 +8,9 @@ import Expense from './pages/Dashboard/Expense';
 import Income from './pages/Dashboard/Income';
 import UserProvider from './context/UserContext';
 import {Toaster} from 'react-hot-toast';
+import OtpVerification from './pages/OtpVerification';
+//import OtpVerification from './pages/OtpVerification';
+
 
 
 const App = () => {
@@ -19,6 +22,7 @@ const App = () => {
          <Route path="/" element={<Root/>}/>
          <Route path="/login" exact element = {<Login/>}/>
           <Route path="/signUp" exact element = {<SignUp/>}/>
+          <Route path="/verify-otp" element={<OtpVerification />} />
           <Route path="/dashboard" element={<Home/>} />
           <Route path="/income" element={<Income/>} />
           <Route path="/expense" element={<Expense/>} />
@@ -46,3 +50,5 @@ const Root = () => {
   //redirect to the dashboard if authenticated,otherwise login
   return isAuthenticted ? (<Navigate to="/dashboard" />) : (<Navigate to="/login" />)
 };
+
+//<Route path="/verify-otp/:userId" element={<OtpVerification />} />

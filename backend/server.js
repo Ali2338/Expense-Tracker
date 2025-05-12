@@ -1,5 +1,6 @@
 require('dotenv').config();
 //console.log("MONGO_URI from .env:", process.env.MONGO_URI);
+const cookieParser = require('cookie-parser');
 const express = require('express');
 const cors = require('cors');
 const path = require('path');
@@ -16,6 +17,8 @@ app.use(cors({
 }));
 
 app.use(express.json());
+app.use(cookieParser());
+app.use(express.urlencoded({ extended: true }));
 
 connectDB();
 

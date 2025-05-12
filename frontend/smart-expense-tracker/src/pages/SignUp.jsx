@@ -6,7 +6,7 @@ import Input from '../components/inputs/input';
 import { Link } from 'react-router-dom';
 import { validateEmail } from '../utils/helper';
 import ProfilePhotoSelector from '../components/inputs/ProfilePhotoSelector';
-import axiosInstance from '../utils/axiosInstance'; 
+import axiosInstance from '../utils/axiosInstance';
 import { API_PATHS } from '../utils/apiPaths';
 import { UserContext } from '../context/UserContext';
 import { useContext } from 'react';
@@ -18,11 +18,12 @@ const SignUp = () => {
     const [email, setEmail] = useState('');
     const [password, setPassword] = useState('');
     const [error, setError] = useState(null);
-    
+
+
     const { updateUser } = useContext(UserContext);
     const navigate = useNavigate();
 
-    const handleLogin = async (e) => {
+    const handleSignUp = async (e) => {
         e.preventDefault();
         let profileImageUrl = "";
 
@@ -53,12 +54,9 @@ const SignUp = () => {
                 password,
                 profileImageUrl
             });
-            const { token, user } = response.data;
-            if (token) {
-                localStorage.setItem('token', token);
-                updateUser(user);
-                navigate('/dashboard');
-            }
+            // Expect: message and userId (no token/user yet)
+            navigate('/verify-otp', { state: { email } });
+
         } catch (error) {
             if (error.response && error.response.data.message) {
                 setError(error.response.data.message);
@@ -73,7 +71,7 @@ const SignUp = () => {
                 <h3 className='text-xl font-semibold text-black'>Create an Account</h3>
                 <p className='text-xs text-slate-700 mt-[5px] mb-6'>Join us toaday by entering your details below</p>
 
-                <form onSubmit={handleLogin} className=''>
+                <form onSubmit={handleSignUp } className=''>
                     <ProfilePhotoSelector image={profilepic} setImage={setProfilePic} />
                     <div className='grid grid-cols-1 md:grid-cols-2 gap-4'>
                         <Input
@@ -105,7 +103,8 @@ const SignUp = () => {
 
                     <button
                         type="submit"
-                        className="btn-primary">
+                        className="btn-primary"
+                        >
                         SIGN UP
                     </button>
 

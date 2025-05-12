@@ -20,7 +20,7 @@ const CustomLineChart = ({ data }) => {
           <p className="text-sm text-gray-600">
             Amount:{" "}
             <span className="text-sm font-medium text-gray-900">
-              ${Number(payload[0].payload.amount).toFixed(2)}
+              {Number(payload[0].payload.amount).toFixed(2)}
             </span>
           </p>
         </div>
